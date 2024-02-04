@@ -4,23 +4,23 @@ import com.example.demo.dto.AuditPoolDTO;
 import com.example.demo.entity.AuditPool;
 import com.example.demo.repository.AuditPoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuditPoolService {
 
     @Autowired
-    private AuditPoolRepository auditPoolRepository;
+    private final AuditPoolRepository auditPoolRepository;
     private static final String CSV_HEADER = "ID,Content,BioId,ConfigID";
+
+    public AuditPoolService(AuditPoolRepository auditPoolRepository) {
+        this.auditPoolRepository = auditPoolRepository;
+    }
 
 //    public ResponseEntity<byte[]> exportToCSV(List<AuditPoolDTO> objects) {
 //        try {
@@ -66,31 +66,31 @@ public class AuditPoolService {
     }
 
     public List<AuditPoolDTO> getListAuditPoolDTO() {
-
         List<AuditPoolDTO> auditPoolDTOS = new ArrayList<>();
-
         List<String> bioids = new ArrayList<>();
-        AuditPoolDTO auditPoolDTO = null;
-        List<AuditPool> auditPools = null;
+        AuditPoolDTO auditPoolDTO;
+        List<AuditPool> auditPools;
         bioids.add("1");
         bioids.add("1");
         bioids.add("2");
         bioids.add("20");
 
-        for (int i = 0; i < bioids.size(); i++) {
-            auditPools = auditPoolRepository.findByAuditPoolBioId(bioids.get(i));
-            if (!(auditPools.isEmpty())) {
-                for (AuditPool auditPool : auditPools) {
-                    auditPoolDTO = new AuditPoolDTO(auditPool);
-                    auditPoolDTOS.add(auditPoolDTO);
+        try {
+            for (String bioid : bioids) {
+                auditPools = auditPoolRepository.findByAuditPoolBioId(bioid);
+                if (!(auditPools.isEmpty())) {
+                    for (AuditPool auditPool : auditPools) {
+                        auditPoolDTO = new AuditPoolDTO(auditPool);
+                        auditPoolDTOS.add(auditPoolDTO);
+                    }
                 }
             }
+            for (AuditPoolDTO poolDTO : auditPoolDTOS) {
+                System.out.println(poolDTO.toString());
+            }
+        } catch (Exception exception) {
+            System.out.println("Has any error: " + exception);
         }
-
-        for (int i = 0; i < auditPoolDTOS.size(); i++) {
-            System.out.println(auditPoolDTOS.get(i).toString());
-        }
-
 
         return auditPoolDTOS;
     }
