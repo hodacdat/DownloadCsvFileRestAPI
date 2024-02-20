@@ -9,7 +9,7 @@ import java.util.List;
 public interface AuditPoolRepository extends JpaRepository<AuditPool, Long> {
 
     @Query(value = "SELECT * FROM audit_pool WHERE id = :id", nativeQuery = true)
-    AuditPool findByAuditPoolId(Long id);
+    AuditPool findByAuditPoolId(long id);
 
     @Query(value = "SELECT * FROM audit_pool WHERE bio_id = :bioid", nativeQuery = true)
     List<AuditPool> findByAuditPoolBioId(String bioid);

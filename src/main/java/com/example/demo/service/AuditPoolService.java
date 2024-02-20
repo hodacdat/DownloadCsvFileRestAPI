@@ -4,6 +4,7 @@ import com.example.demo.dto.AuditPoolDTO;
 import com.example.demo.dto.MyResponseDTO;
 import com.example.demo.entity.AuditPool;
 import com.example.demo.repository.AuditPoolRepository;
+import com.example.demo.repository.GroupOfColumnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,14 @@ public class AuditPoolService {
 
     @Autowired
     private final AuditPoolRepository auditPoolRepository;
+
+    @Autowired
+    private final GroupOfColumnRepository groupOfColumnRepository;
     private static final String CSV_HEADER = "ID,Content,BioId,ConfigID";
 
-    public AuditPoolService(AuditPoolRepository auditPoolRepository) {
+    public AuditPoolService(AuditPoolRepository auditPoolRepository, GroupOfColumnRepository groupOfColumnRepository) {
         this.auditPoolRepository = auditPoolRepository;
+        this.groupOfColumnRepository = groupOfColumnRepository;
     }
 
 //    public ResponseEntity<byte[]> exportToCSV(List<AuditPoolDTO> objects) {
@@ -71,8 +76,11 @@ public class AuditPoolService {
         AuditPoolDTO auditPoolDTO;
         List<AuditPool> auditPools;
         bioids.add("3");
-        boolean get3MoreColumn = false;
         String titleMore = "a1,a2,a3";
+
+        long curGroup = 1L;
+
+        titleMore = groupOfColumnRepository.findByCurId(curGroup).getNameOfColumn();
         List<String> stringList = Arrays.asList(titleMore.split(","));
 
         for (String a : stringList) {
@@ -86,18 +94,20 @@ public class AuditPoolService {
                 if (!(auditPools.isEmpty())) {
                     for (AuditPool auditPool : auditPools) {
                         auditPoolDTO = new AuditPoolDTO(auditPool);
-                        if (get3MoreColumn) {
+                        if (curGroup == 1L) {
+                            if (stringList.contains("cl1")) {
+                                auditPoolDTO.setDynamicColumn("cl1", 100);
+                            }
+                            if (stringList.contains("cl2")) {
+                                auditPoolDTO.setDynamicColumn("cl2", 200);
+                            }
+                            if (stringList.contains("cl3")) {
+                                auditPoolDTO.setDynamicColumn("cl3", 300);
+                            }
 
-                            if (stringList.contains("a1")) {
-                                auditPoolDTO.setDynamicColumn("a1", 100);
-                            }
-                            if (stringList.contains("a2")) {
-                                auditPoolDTO.setDynamicColumn("a2", 200);
-                            }
-                            if (stringList.contains("a4")) {
-                                auditPoolDTO.setDynamicColumn("a4", 300);
-
-                            }
+//                            for (String title : stringList){
+//                                auditPoolDTO.setDynamicColumn(title, 300);
+//                            }
 
                         }
                         auditPoolDTOS.add(auditPoolDTO);
@@ -109,7 +119,8 @@ public class AuditPoolService {
 //            for (AuditPoolDTO poolDTO : auditPoolDTOS) {
 //                System.out.println(poolDTO.toString());
 //            }
-        } catch (Exception exception) {
+        } catch (
+                Exception exception) {
             System.out.println("Has any error: " + exception);
         }
 
