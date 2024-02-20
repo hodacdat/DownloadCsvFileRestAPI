@@ -5,22 +5,42 @@ import com.example.demo.entity.AuditPool;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AuditPoolDTO {
+public class MyResponseDTO {
+    // Static columns
+    private Long id;
+    private String name;
 
     private AuditPool auditPool;
 
-    private long configID;
+    public MyResponseDTO( AuditPool auditPool) {
+        this.auditPool = auditPool;
+        dynamicColumns = new HashMap<>();
 
+    }
+
+    // Dynamic columns
     private Map<String, Object> dynamicColumns;
 
-    public AuditPoolDTO() {
+    public MyResponseDTO() {
         dynamicColumns = new HashMap<>();
     }
 
-    public AuditPoolDTO(AuditPool auditPool) {
-        this.auditPool = auditPool;
-        this.configID = 1;
-        dynamicColumns = new HashMap<>();
+    // Getters and Setters for static columns
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public AuditPool getAuditPool() {
@@ -31,15 +51,8 @@ public class AuditPoolDTO {
         this.auditPool = auditPool;
     }
 
-    public long getConfigID() {
-        return configID;
-    }
+    // Getters and Setters for dynamic columns
 
-    public void setConfigID(long configID) {
-        this.configID = configID;
-    }
-
-    //for dynamic
     public Object getDynamicColumn(String columnName) {
         return dynamicColumns.get(columnName);
     }
@@ -55,13 +68,4 @@ public class AuditPoolDTO {
     public void setDynamicColumns(Map<String, Object> dynamicColumns) {
         this.dynamicColumns = dynamicColumns;
     }
-
-//    @Override
-//    public String toString() {
-//        return "AuditPoolDTO{" +
-//                "auditPool=" + auditPool +
-//                ", configID=" + configID +
-//                ", dynamicColumns=" + dynamicColumns +
-//                '}';
-//    }
 }

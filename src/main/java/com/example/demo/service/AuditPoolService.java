@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AuditPoolDTO;
+import com.example.demo.dto.MyResponseDTO;
 import com.example.demo.entity.AuditPool;
 import com.example.demo.repository.AuditPoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AuditPoolService {
@@ -70,10 +70,15 @@ public class AuditPoolService {
         List<String> bioids = new ArrayList<>();
         AuditPoolDTO auditPoolDTO;
         List<AuditPool> auditPools;
-        bioids.add("1");
-        bioids.add("1");
-        bioids.add("2");
-        bioids.add("20");
+        bioids.add("3");
+        boolean get3MoreColumn = false;
+        String titleMore = "a1,a2,a3";
+        List<String> stringList = Arrays.asList(titleMore.split(","));
+
+        for (String a : stringList) {
+            System.out.println("++++++++++++" + a);
+        }
+//        bioids.add("2");
 
         try {
             for (String bioid : bioids) {
@@ -81,18 +86,62 @@ public class AuditPoolService {
                 if (!(auditPools.isEmpty())) {
                     for (AuditPool auditPool : auditPools) {
                         auditPoolDTO = new AuditPoolDTO(auditPool);
+                        if (get3MoreColumn) {
+
+                            if (stringList.contains("a1")) {
+                                auditPoolDTO.setDynamicColumn("a1", 100);
+                            }
+                            if (stringList.contains("a2")) {
+                                auditPoolDTO.setDynamicColumn("a2", 200);
+                            }
+                            if (stringList.contains("a4")) {
+                                auditPoolDTO.setDynamicColumn("a4", 300);
+
+                            }
+
+                        }
                         auditPoolDTOS.add(auditPoolDTO);
                     }
                 }
+
+
             }
-            for (AuditPoolDTO poolDTO : auditPoolDTOS) {
-                System.out.println(poolDTO.toString());
-            }
+//            for (AuditPoolDTO poolDTO : auditPoolDTOS) {
+//                System.out.println(poolDTO.toString());
+//            }
         } catch (Exception exception) {
             System.out.println("Has any error: " + exception);
         }
 
         return auditPoolDTOS;
+    }
+
+    public List<MyResponseDTO> getExampleDataById(Long id) {
+        // Retrieve data from the data source
+        // Perform any necessary logic to determine dynamic columns
+        List<MyResponseDTO> myResponseDTOS = new ArrayList<>();
+        AuditPool auditPool = auditPoolRepository.findByAuditPoolId(1L);
+        for (int i = 0; i < 2; i++) {
+
+            MyResponseDTO responseDTO = new MyResponseDTO(auditPool);
+
+            // Populate static columns
+            responseDTO.setId(id);
+
+            // Conditionally add dynamic columns based on ID
+            if (id == 1) {
+                responseDTO.setDynamicColumn("column1", 1);
+                responseDTO.setDynamicColumn("column2", 2);
+            } else if (id == 2) {
+                responseDTO.setDynamicColumn("column3", 3);
+                responseDTO.setDynamicColumn("column4", 4);
+                responseDTO.setDynamicColumn("column5", 5);
+            }
+
+            myResponseDTOS.add(responseDTO);
+        }
+
+        return myResponseDTOS;
     }
 
     public byte[] generateCSV(List<AuditPoolDTO> objects) throws IOException {
