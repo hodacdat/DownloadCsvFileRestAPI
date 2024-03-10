@@ -86,8 +86,6 @@ public class AuditPoolService {
         for (String a : stringList) {
             System.out.println("++++++++++++" + a);
         }
-//        bioids.add("2");
-
         try {
             for (String bioid : bioids) {
                 auditPools = auditPoolRepository.findByAuditPoolBioId(bioid);
@@ -104,26 +102,15 @@ public class AuditPoolService {
                             if (stringList.contains("cl3")) {
                                 auditPoolDTO.setDynamicColumn("cl3", 300);
                             }
-
-//                            for (String title : stringList){
-//                                auditPoolDTO.setDynamicColumn(title, 300);
-//                            }
-
                         }
                         auditPoolDTOS.add(auditPoolDTO);
                     }
                 }
-
-
             }
-//            for (AuditPoolDTO poolDTO : auditPoolDTOS) {
-//                System.out.println(poolDTO.toString());
-//            }
         } catch (
                 Exception exception) {
             System.out.println("Has any error: " + exception);
         }
-
         return auditPoolDTOS;
     }
 

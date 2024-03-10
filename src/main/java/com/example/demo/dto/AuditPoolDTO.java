@@ -56,12 +56,12 @@ public class AuditPoolDTO {
         this.dynamicColumns = dynamicColumns;
     }
 
-//    @Override
-//    public String toString() {
-//        return "AuditPoolDTO{" +
-//                "auditPool=" + auditPool +
-//                ", configID=" + configID +
-//                ", dynamicColumns=" + dynamicColumns +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "AuditPoolDTO{" +
+                "auditPool=" + auditPool +
+                ", configID=" + configID +
+                ", dynamicColumns=" + dynamicColumns +
+                '}';
+    }
 }
