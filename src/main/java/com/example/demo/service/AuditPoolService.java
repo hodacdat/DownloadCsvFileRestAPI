@@ -79,37 +79,40 @@ public class AuditPoolService {
         String titleMore = "a1,a2,a3";
 
         long curGroup = 1L;
-
-        titleMore = groupOfColumnRepository.findByCurId(curGroup).getNameOfColumn();
-        List<String> stringList = Arrays.asList(titleMore.split(","));
-
-        for (String a : stringList) {
-            System.out.println("++++++++++++" + a);
-        }
         try {
-            for (String bioid : bioids) {
-                auditPools = auditPoolRepository.findByAuditPoolBioId(bioid);
-                if (!(auditPools.isEmpty())) {
-                    for (AuditPool auditPool : auditPools) {
-                        auditPoolDTO = new AuditPoolDTO(auditPool);
-                        if (curGroup == 1L) {
-                            if (stringList.contains("cl1")) {
-                                auditPoolDTO.setDynamicColumn("cl1", 100);
+            titleMore = groupOfColumnRepository.findByCurId(curGroup).getNameOfColumn();
+            List<String> stringList = Arrays.asList(titleMore.split(","));
+
+            for (String a : stringList) {
+                System.out.println("++++++++++++" + a);
+            }
+            try {
+                for (String bioid : bioids) {
+                    auditPools = auditPoolRepository.findByAuditPoolBioId(bioid);
+                    if (!(auditPools.isEmpty())) {
+                        for (AuditPool auditPool : auditPools) {
+                            auditPoolDTO = new AuditPoolDTO(auditPool);
+                            if (curGroup == 1L) {
+                                if (stringList.contains("cl1")) {
+                                    auditPoolDTO.setDynamicColumn("cl1", 100);
+                                }
+                                if (stringList.contains("cl2")) {
+                                    auditPoolDTO.setDynamicColumn("cl2", 200);
+                                }
+                                if (stringList.contains("cl3")) {
+                                    auditPoolDTO.setDynamicColumn("cl3", 300);
+                                }
                             }
-                            if (stringList.contains("cl2")) {
-                                auditPoolDTO.setDynamicColumn("cl2", 200);
-                            }
-                            if (stringList.contains("cl3")) {
-                                auditPoolDTO.setDynamicColumn("cl3", 300);
-                            }
+                            auditPoolDTOS.add(auditPoolDTO);
                         }
-                        auditPoolDTOS.add(auditPoolDTO);
                     }
                 }
+            } catch (Exception exception) {
+                System.out.println("Has any error: " + exception);
             }
-        } catch (
-                Exception exception) {
-            System.out.println("Has any error: " + exception);
+        } catch (Exception e) {
+            System.out.println("Has any error: " + e);
+
         }
         return auditPoolDTOS;
     }
