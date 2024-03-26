@@ -57,7 +57,7 @@ public class ClientInfoController {
         System.out.println(ipAddress);
 //        String ipAddress = request.getRemoteAddr();
         try {
-            return geoLocationService.getGeoLocationInfo(ipAddress);
+            return geoLocationService.getGeoLocationInfo(ipAddress, request);
         } catch (IOException | GeoIp2Exception e) {
             e.printStackTrace();
             return "Error retrieving geolocation information";
